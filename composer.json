@@ -2,7 +2,7 @@
     "name": "mojosoft/phpcore",
     "type": "library",
     "description": "MojoSoft - CorePHP Framework",
-    "keywords": ["framework","core","sdk"],
+    "keywords": ["framework","core","sdk", "clusterfrell"],
     "homepage": "https://github.com/mojosoft/phpcore",
     "version": "1.0.0",
     "license": "MIT",

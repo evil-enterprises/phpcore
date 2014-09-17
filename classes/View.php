@@ -4,7 +4,7 @@
  * View
  *
  * View template handling class.
- * 
+ *
  * @package core
  * @author stefano.azzolini@caffeinalab.com
  * @version 1.0
@@ -13,29 +13,32 @@
 
 namespace phpcore;
 
-class View {
+class View
+{
     use Module;
 
     protected static $handler = null;
     protected $options = [
-      'template'  => '',
-      'data'      => [],
+        'template'  => '',
+        'data'      => [],
     ];
 
     /**
      * Construct a new view based on the passed template
      * @param  string $template The template path
      */
-    public function __construct($template){
-      $this->options['template'] = $template;
+    public function __construct($template)
+    {
+        $this->options['template'] = $template;
     }
 
     /**
      * Load a Template Handler
      * @param  class $handler The template handler class instance
      */
-    public static function using(&$handler){
-      static::$handler = $handler;
+    public static function using(&$handler)
+    {
+        static::$handler = $handler;
     }
 
     /**
@@ -44,9 +47,10 @@ class View {
      * @param  array $data     The key-value map of data to pass to the view
      * @return View
      */
-    public static function from($template,$data=null){
-      $view = new self($template);
-      return $data ? $view->with($data) : $view;
+    public static function from($template,$data=null)
+    {
+        $view = new self($template);
+        return $data ? $view->with($data) : $view;
     }
 
     /**
@@ -54,51 +58,58 @@ class View {
      * @param  array $data     The key-value map of data to pass to the view
      * @return View
      */
-    public function with($data){
-      if ($data){
-        $tmp = array_merge($data, (isset($this->options['data'])?$this->options['data']:[]));
-        $this->options['data'] = $tmp;
-      }
-      return $this;
+    public function with($data)
+    {
+        if ($data)
+        {
+            $tmp = array_merge($data, (isset($this->options['data'])?$this->options['data']:[]));
+            $this->options['data'] = $tmp;
+        }
+        return $this;
     }
- 
+
     /**
      * Render view when casted to a string
      * @return string The rendered view
      */
-    public function __toString(){
-      return static::$handler->render($this->options['template'],$this->options['data']);
+    public function __toString()
+    {
+        return static::$handler->render($this->options['template'],$this->options['data']);
     }
 
     /**
      * Returns the handler instance
      * @return mixed
      */
-    public static function & handler(){
-      return static::$handler;
+    public static function & handler()
+    {
+        return static::$handler;
     }
 
     /**
      * Check if a template exists
      * @return bool
      */
-    public function exists($templatePath){
-      return static::$handler->exists($templatePath);
+    public function exists($templatePath)
+    {
+        return static::$handler->exists($templatePath);
     }
 
 
     /**
      * Propagate the call to the handler
      */
-    public function __call($n,$p){
-      return call_user_func_array([static::$handler,$n],$p);
+    public function __call($n,$p)
+    {
+        return call_user_func_array([static::$handler,$n],$p);
     }
 
     /**
      * Propagate the static call to the handler
      */
-    public static function __callStatic($n,$p){
-      return forward_static_call_array([static::$handler,$n],$p);
+    public static function __callStatic($n,$p)
+    {
+        return forward_static_call_array([static::$handler,$n],$p);
     }
 
 

@@ -3,7 +3,7 @@
  * Loader
  *
  * Easy class autoloading.
- * 
+ *
  * @package core
  * @author stefano.azzolini@caffeinalab.com
  * @version 1.0
@@ -12,25 +12,33 @@
 
 namespace phpcore;
 
-class Loader {
+class Loader
+{
     protected static $paths = [];
-    
-    public static function addPath($path,$name=null){
+
+    public static function addPath($path,$name=null)
+    {
         static::$paths[$path] = $name;
     }
 
-    public static function register(){
+    public static function register()
+    {
         ini_set('unserialize_callback_func', 'spl_autoload_call');
-        spl_autoload_register(function($class){
+        spl_autoload_register(function($class)
+        {
             $cfile = strtr($class,'_\\','//') . '.php';
-            foreach (static::$paths as $path => $v) {
+            foreach (static::$paths as $path => $v)
+            {
                 $file = rtrim($path,'/').'/'.$cfile;
-                if(is_file($file)) return include($file);
+                if(is_file($file))
+                {
+                    return include($file);
+                }
             }
             return false;
         },false,true);
     }
-    
+
 }
 
 Loader::addPath(__DIR__);

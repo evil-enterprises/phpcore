@@ -13,15 +13,17 @@
 
 namespace phpcore;
 
-class Hash {
-    
+class Hash
+{
+
     /**
      * Create ah hash for payload
      * @param  mixed $payload The payload string/object/array
      * @param  integer $method  The hashing method, default is "md5"
      * @return string          The hash string
      */
-    public static function make($payload,$method='md5'){
+    public static function make($payload,$method='md5')
+    {
         return hash($method,serialize($payload));
     }
 
@@ -32,7 +34,8 @@ class Hash {
      * @param  integer $method The hashing method
      * @return bool            Returns `true` if payload matches hash
      */
-    public static function verify($payload,$hash,$method='md5'){
+    public static function verify($payload,$hash,$method='md5')
+    {
         return static::make($payload,$method) == $hash;
     }
 
@@ -43,7 +46,8 @@ class Hash {
      *
      * @return array   Array containing the list of supported hashing algorithms.
      */
-    public static function methods(){
+    public static function methods()
+    {
         return hash_algos();
     }
 
@@ -57,16 +61,18 @@ class Hash {
      *
      * @return bool
      */
-    public static function can($algo){
+    public static function can($algo)
+    {
         return in_array($algo,hash_algos());
     }
-    
+
     /**
      * Static magic for creating hashes with a specified algorithm.
-     * 
+     *
      * See [hash-algos](http://php.net/manual/it/function.hash-algos.php) for a list of algorithms
      */
-    public static function __callStatic($method,$params){
+    public static function __callStatic($method,$params)
+    {
         return self::make(current($params),$method);
     }
 

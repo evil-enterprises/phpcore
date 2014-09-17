@@ -4,7 +4,7 @@
  * Route
  *
  * URL Router and action dispatcher.
- * 
+ *
  * @package core
  * @author stefano.azzolini@caffeinalab.com
  * @version 1.0
@@ -36,7 +36,7 @@ class Route
 
     /**
      * Create a new route definition. This method permits a fluid interface.
-     * 
+     *
      * @param string $URLPattern The URL pattern, can be used named parameters for variables extraction
      * @param callable $callback The callback to invoke on route match.
      * @param string $method The HTTP method for which the route must respond.
@@ -124,7 +124,7 @@ class Route
         // Call direct middlewares
         if($this->middlewares)
         {
-        // Reverse middlewares order
+            // Reverse middlewares order
             foreach (array_reverse($this->middlewares) as $mw)
             {
                 $mw_result = call_user_func($mw->bindTo($this));
@@ -170,7 +170,7 @@ class Route
         // Apply afters
         if($this->afters)
         {
-        // Reverse middlewares order
+            // Reverse middlewares order
             foreach (array_reverse($this->afters) as $cb) {
                 call_user_func($cb->bindTo($this));
             }
@@ -254,12 +254,12 @@ class Route
 
     /**
      * Defines the HTTP Methods to bind the route onto.
-     * 
+     *
      * Example:
      * <code>
      *  Route::on('/test')->via('get','post','delete');
      * </code>
-     * 
+     *
      * @return Route
      */
     public function & via()
@@ -275,7 +275,7 @@ class Route
 
     /**
      * Defines the regex rules for the named parameter in the current URL pattern
-     * 
+     *
      * Example:
      * <code>
      *  Route::on('/proxy/:number/:url')
@@ -284,7 +284,7 @@ class Route
      *      'url'     => '.+',
      *    ]);
      * </code>
-     * 
+     *
      * @param  array  $rules The regex rules
      * @return Route
      */
@@ -310,7 +310,7 @@ class Route
      *      'delete'  => function(){ echo "HTTP DELETE"; },
      *    ]);
      * </code>
-     * 
+     *
      * @param  string $URLPattern The URL to match against, you can define named segments to be extracted and passed to the callback.
      * @param  array $callbacks The HTTP Method => callable map.
      * @return Route
@@ -373,7 +373,7 @@ class Route
      */
     protected static function isDynamic($pattern)
     {
-        return 
+        return
             (strpos($pattern,':')!==false) ||
             (strpos($pattern,'(')!==false) ||
             (strpos($pattern,'?')!==false) ||
@@ -381,7 +381,7 @@ class Route
             (strpos($pattern,'*')!==false) ||
             (strpos($pattern,'+')!==false);
     }
-    
+
     /**
      * Add a route to the internal route repository.
      * @param Route $r
@@ -410,7 +410,7 @@ class Route
 
         if(static::isDynamic($prefix))
         {
-        
+
             // Dynamic group, capture vars
             $vars = static::extractVariablesFromURL(static::compilePatternAsRegex($prefix_complete),null,true);
 
@@ -420,7 +420,7 @@ class Route
                 //TODO Throw Exception
                 return;
             }
-         
+
             static::$prefix[] = $prefix;
             if(empty(static::$group))
             {
@@ -439,7 +439,7 @@ class Route
                 static::$prefix=[''];
             }
             return $group;
-        
+
         }
         if (0 === strpos(Request::URI(), $prefix_complete))
         {

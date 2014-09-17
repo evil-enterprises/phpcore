@@ -3,7 +3,7 @@
  * Response
  *
  * Handles the HTTP Response for the current execution.
- * 
+ *
  * @package core
  * @author stefano.azzolini@caffeinalab.com
  * @version 1.0
@@ -12,7 +12,8 @@
 
 namespace phpcore;
 
-class Response {
+class Response
+{
     use Module;
 
     const TYPE_JSON          = 'application/json';
@@ -30,37 +31,44 @@ class Response {
     protected static $buffer      = null;
     protected static $link        = null;
 
-    public static function type($mime){
+    public static function type($mime)
+    {
         static::header('Content-Type',$mime);
     }
 
     /**
      * Start capturing output
      */
-    public static function start(){
+    public static function start()
+    {
         static::$buffer = ob_start();
     }
 
     /**
      * Enable CORS HTTP headers.
      */
-    public static function enableCORS(){
-        
+    public static function enableCORS()
+    {
+
         // Allow from any origin
-        if (isset($_SERVER['HTTP_ORIGIN'])) {
-          static::header('Access-Control-Allow-Origin',$_SERVER['HTTP_ORIGIN']);
-          static::header('Access-Control-Allow-Credentials','true');
-          static::header('Access-Control-Max-Age',86400);
+        if (isset($_SERVER['HTTP_ORIGIN']))
+        {
+            static::header('Access-Control-Allow-Origin',$_SERVER['HTTP_ORIGIN']);
+            static::header('Access-Control-Allow-Credentials','true');
+            static::header('Access-Control-Max-Age',86400);
         }
 
         // Access-Control headers are received during OPTIONS requests
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-              static::header('Access-Control-Allow-Methods',
-                'GET, POST, PUT, DELETE, OPTIONS, HEAD, CONNECT, PATCH, TRACE');
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+            {
+                static::header('Access-Control-Allow-Methods',
+                    'GET, POST, PUT, DELETE, OPTIONS, HEAD, CONNECT, PATCH, TRACE');
             }
-            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
-              static::header('Access-Control-Allow-Headers',$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']);
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+            {
+                static::header('Access-Control-Allow-Headers',$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']);
             }
             static::send();
             exit;
@@ -71,8 +79,10 @@ class Response {
      * Finish the output buffer capturing.
      * @return string The captured buffer
      */
-    public static function end(){
-        if (static::$buffer){
+    public static function end()
+    {
+        if (static::$buffer)
+        {
             static::$payload[] = ob_get_contents();
             ob_end_clean();
             static::$buffer = null;
@@ -84,14 +94,16 @@ class Response {
      * Check if an response output buffering is active.
      * @return boolean
      */
-    public static function isBuffering(){
+    public static function isBuffering()
+    {
         return static::$buffer;
     }
 
     /**
      * Clear the response body
      */
-    public static function clean(){
+    public static function clean()
+    {
         static::$payload = [];
     }
 
@@ -99,7 +111,8 @@ class Response {
      * Append a JSON object to the buffer.
      * @param  mixed $payload Data to append to the response buffer
      */
-    public static function json($payload){
+    public static function json($payload)
+    {
         static::type(static::TYPE_JSON);
         static::$payload[] = json_encode($payload,JSON_NUMERIC_CHECK);
     }
@@ -108,7 +121,8 @@ class Response {
      * Append a text to the buffer.
      * @param  mixed $payload Text to append to the response buffer
      */
-    public static function text(){
+    public static function text()
+    {
         static::type(static::TYPE_TEXT);
         static::$payload[] = implode('',func_get_args());
     }
@@ -117,7 +131,8 @@ class Response {
      * Append an XML string to the buffer.
      * @param  mixed $payload Data to append to the response buffer
      */
-    public static function xml(){
+    public static function xml()
+    {
         static::type(static::TYPE_XML);
         static::$payload[] = implode('',func_get_args());
     }
@@ -126,7 +141,8 @@ class Response {
      * Append a SVG string to the buffer.
      * @param  mixed $payload Data to append to the response buffer
      */
-    public static function svg(){
+    public static function svg()
+    {
         static::type(static::TYPE_SVG);
         static::$payload[] = implode('',func_get_args());
     }
@@ -135,7 +151,8 @@ class Response {
      * Append an HTML string to the buffer.
      * @param  mixed $payload Data to append to the response buffer
      */
-    public static function html(){
+    public static function html()
+    {
         static::type(static::TYPE_HTML);
         static::$payload[] = implode('',func_get_args());
     }
@@ -144,31 +161,43 @@ class Response {
      * Append a raw string to the buffer.
      * @param  mixed $payload Data to append to the response buffer
      */
-    public static function add(){
+    public static function add()
+    {
         static::$payload[] = implode('',func_get_args());
     }
 
-    public static function status($code,$message=''){
+    public static function status($code,$message='')
+    {
         static::header('Status',$message?:$code,$code);
     }
 
-    public static function header($name,$value,$code=null){
+    public static function header($name,$value,$code=null)
+    {
         static::$headers[$name] = [$value,$code];
     }
 
-    public static function error($code=500,$message='Application Error'){
+    public static function error($code=500,$message='Application Error')
+    {
         static::status($code,$message);
         Event::trigger('core.response.error',$code,$message);
     }
 
-    public static function body($setBody=null){
-      if($setBody) static::$payload = [$setBody];
-      return Filter::with('core.response.body',is_array(static::$payload)?implode('',static::$payload):static::$payload);
+    public static function body($setBody=null)
+    {
+        if($setBody)
+        {
+            static::$payload = [$setBody];
+        }
+        return Filter::with('core.response.body',is_array(static::$payload)?implode('',static::$payload):static::$payload);
     }
 
-    public static function headers($setHeaders=null){
-       if($setHeaders) static::$headers = $setHeaders;
-       return static::$headers;
+    public static function headers($setHeaders=null)
+    {
+        if($setHeaders)
+        {
+            static::$headers = $setHeaders;
+        }
+        return static::$headers;
     }
 
     /**
@@ -178,10 +207,11 @@ class Response {
      *
      * @return array Headers and body of the response
      */
-    public static function save(){
+    public static function save()
+    {
         return [
-          'head' => static::$headers,
-          'body' => static::body(),
+            'head' => static::$headers,
+            'body' => static::body(),
         ];
     }
 
@@ -192,34 +222,54 @@ class Response {
      *
      * @param  array $data head/body saved state
      */
-    public static function load($data){
-      $data = (object)$data;
-      if (isset($data->head)) static::headers($data->head);
-      if (isset($data->body)) static::body($data->body);
+    public static function load($data)
+    {
+        $data = (object)$data;
+        if (isset($data->head))
+        {
+            static::headers($data->head);
+        }
+        if (isset($data->body))
+        {
+            static::body($data->body);
+        }
     }
 
-    public static function send(){
+    public static function send()
+    {
         Event::trigger('core.response.send');
-        if(false === headers_sent()) foreach (static::$headers as $name => $value_code) {
-            if (is_array($value_code)) {
-                list($value,$code) = count($value_code) >1 ? $value_code : [current($value_code),200];
-            } else {
-                $value = $value_code;
-                $code = null;
-            }
+        if(false === headers_sent())
+        {
+            foreach (static::$headers as $name => $value_code) {
+                if (is_array($value_code))
+                {
+                    list($value,$code) = count($value_code) >1 ? $value_code : [current($value_code),200];
+                }
+                else
+                {
+                    $value = $value_code;
+                    $code = null;
+                }
 
-            if ($value == 'Status'){
-              if (function_exists('http_response_code')){
-                http_response_code($code);
-              } else {
-                header('Status: '.$code,true,$code);
-              }
-              
-            } else {
-                $code ?
-                    header($name.': '.$value,true,$code)
-                :
-                    header($name.': '.$value,true);
+                if ($value == 'Status')
+                {
+                    if (function_exists('http_response_code'))
+                    {
+                        http_response_code($code);
+                    }
+                    else
+                    {
+                        header('Status: '.$code,true,$code);
+                    }
+
+                }
+                else
+                {
+                    $code ?
+                        header($name.': '.$value,true,$code)
+                        :
+                        header($name.': '.$value,true);
+                }
             }
         }
         echo static::body();

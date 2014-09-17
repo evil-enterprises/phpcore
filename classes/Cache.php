@@ -4,31 +4,41 @@
  * Cache
  *
  * Multi-strategy cache store.
- * 
+ *
  * @package core
  * @author stefano.azzolini@caffeinalab.com
  * @version 1.0
  * @copyright Caffeina srl - 2014 - http://caffeina.co
  */
 namespace phpcore;
-class Cache {
-   protected static $driver = null;
-   protected static $enabled = true;
 
-    public static function get($key,$default='',$expire=0){
-      if (static::$enabled){
-        $hash = static::hash($key);
-        if(static::$driver->exists($hash) && $results = static::$driver->get($hash)){
-            return $results;
-        } else {
-            if($data = is_callable($default)?call_user_func($default):$default){
-                static::$driver->set($hash,$data,$expire);
+class Cache
+{
+    protected static $driver = null;
+    protected static $enabled = true;
+
+    public static function get($key,$default='',$expire=0)
+    {
+        if (static::$enabled)
+        {
+            $hash = static::hash($key);
+            if(static::$driver->exists($hash) && $results = static::$driver->get($hash))
+            {
+                return $results;
             }
-            return $data;
+            else
+            {
+                if($data = is_callable($default)?call_user_func($default):$default)
+                {
+                    static::$driver->set($hash,$data,$expire);
+                }
+                return $data;
+            }
         }
-      } else {
-        return is_callable($default) ? call_user_func($default) : $default;
-      }
+        else
+        {
+            return is_callable($default) ? call_user_func($default) : $default;
+        }
     }
 
     /**
@@ -38,7 +48,7 @@ class Cache {
      * @param  mixed $driver can be a single driver name string, an array of driver names or a map [ driver_name => driver_options array ]
      * @return bool   true if a driver was loaded
      * @example
-     *   
+     *
      *   Cache::using('redis');
      *   Cache::using(['redis','files','memory']); // Prefer "redis" over "files" over "memory" caching
      *   Cache::using([
@@ -51,24 +61,30 @@ class Cache {
      *         ],
      *         'memory'
      *   ]);
-     * 
+     *
      */
-    public static function using($driver){
-      foreach((array)$driver as $key => $value){
-          if(is_numeric($key)){
-            $drv = $value;
-            $conf = [];
-          } else {
-            $drv = $key;
-            $conf = $value;
-          }
-          $class = 'Cache\\' . ucfirst(strtolower($drv));
-          if(class_exists($class) && $class::valid()) {
-            static::$driver = new $class($conf);
-            return true;
-          }
+    public static function using($driver)
+    {
+        foreach((array)$driver as $key => $value)
+        {
+            if(is_numeric($key))
+            {
+                $drv = $value;
+                $conf = [];
+            }
+            else
+            {
+                $drv = $key;
+                $conf = $value;
+            }
+            $class = 'Cache\\' . ucfirst(strtolower($drv));
+            if(class_exists($class) && $class::valid())
+            {
+                static::$driver = new $class($conf);
+                return true;
+            }
         }
-       return false;
+        return false;
     }
 
     /**
@@ -80,40 +96,52 @@ class Cache {
      *
      * @return boolean  Cache on/off status
      */
-    public static function enabled($enabled=null){
+    public static function enabled($enabled=null)
+    {
         return $enabled ? static::$enabled : static::$enabled = $enabled;
     }
 
 
-    public static function set($key,$value,$expire=0){
+    public static function set($key,$value,$expire=0)
+    {
         return static::$driver->set(static::hash($key),$value,$expire);
     }
 
-    public static function delete($key){
+    public static function delete($key)
+    {
         return static::$driver->delete(static::hash($key));
     }
 
-    public static function exists($key){
+    public static function exists($key)
+    {
         return static::$enabled && static::$driver->exists(static::hash($key));
     }
 
-    public static function flush(){
+    public static function flush()
+    {
         return static::$driver->flush();
     }
 
-    public static function inc($key,$value=1){
+    public static function inc($key,$value=1)
+    {
         return static::$driver->inc(static::hash($key),$value);
     }
 
-    public static function dec($key,$value=1){
+    public static function dec($key,$value=1)
+    {
         return static::$driver->dec(static::hash($key),$value);
     }
 
-    public static function hash($key,$group=null){
+    public static function hash($key,$group=null)
+    {
         static $hashes = [];
-        if (false === isset($hashes[$group][$key])){
+        if (false === isset($hashes[$group][$key]))
+        {
             $k = $key;
-            if(is_array($key) && count($key)>1) list($group,$key) = $k;
+            if(is_array($key) && count($key)>1)
+            {
+                list($group,$key) = $k;
+            }
             $hashes[$group][$key] = ($group?$group.'-':'') . md5($key);
         }
         return $hashes[$group][$key];
@@ -124,14 +152,15 @@ class Cache {
  * CacheInterface
  *
  * Cache drivers common interface.
- * 
+ *
  * @package core
  * @author stefano.azzolini@caffeinalab.com
  * @version 1.0
  * @copyright Caffeina srl - 2014 - http://caffeina.co
  */
 
-interface CacheInterface  {
+interface CacheInterface
+{
     public function get($key);
     public function set($key,$value,$expire=0);
     public function delete($key);
