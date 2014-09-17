@@ -1,0 +1,25 @@
+{
+    "name": "mojosoft/phpcore",
+    "type": "library",
+    "description": "MojoSoft - CorePHP Framework",
+    "keywords": ["framework","core","sdk"],
+    "homepage": "https://github.com/mojosoft/phpcore",
+    "version": "1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mojosoft"
+        },
+        {
+            "name": "Stefano Azzolini",
+            "email": "stefano.azzolini@caffeinalab.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "classmap": [ "phpcore/classes/" ]
+    }
+}
