@@ -20,6 +20,8 @@
     },
     "minimum-stability": "dev",
     "autoload": {
-        "classmap": [ "phpcore/classes/" ]
+        "psr-4": {
+            "phpcore\\": "phpcore/classes/"
+        }
     }
 }
