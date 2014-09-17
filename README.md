@@ -1,26 +1,13 @@
-<img src="https://github.com/caffeina-core/core/blob/master/core-logo.png?raw=true" height="200">
-
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/caffeina-core/core/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/caffeina-core/core/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/caffeina-core/core/badges/build.png?b=master)](https://scrutinizer-ci.com/g/caffeina-core/core/build-status/master)
-[![Total Downloads](https://poser.pugx.org/caffeina-core/core/downloads.svg)](https://packagist.org/packages/caffeina-core/core)
-[![Latest Stable Version](https://poser.pugx.org/caffeina-core/core/v/stable.svg)](https://packagist.org/packages/caffeina-core/core)
-[![Latest Unstable Version](https://poser.pugx.org/caffeina-core/core/v/unstable.svg)](https://packagist.org/packages/caffeina-core/core)
-[![License](https://poser.pugx.org/caffeina-core/core/license.svg)](https://packagist.org/packages/caffeina-core/core)
-
-
-> Core is NOT a framework, Core is a toolkit.
-
+> phpcore is a framework
 
 ## Installation
-
 
 Add package to your **composer.json**:
 
 ```json
 {
   "require": {
-    "caffeina-core/core": "dev-master"
+    "mojosoft/phpcore": "dev-master"
   }
 }
 ```
