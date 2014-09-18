@@ -1,1 +1,2 @@
-*.name
+.idea
+.DS_Store
